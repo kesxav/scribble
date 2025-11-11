@@ -1,0 +1,11 @@
+.canvas {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn1 {
+  background-color: red;
+  border: none;
+  height: 1.5em;
+  width: 1.5em;
+}

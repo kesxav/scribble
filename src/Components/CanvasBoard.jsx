@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import styles from "./CanvasBoard.module.css";
 
 export default function CanvasBoard() {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
-  // const [color, setColor] = useState("black");
+  const [color, setColor] = useState("black");
+  const [line, setLine] = useState("5");
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -52,21 +54,48 @@ export default function CanvasBoard() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
 
+  function handleColorChange(e) {
+    setColor(e.target.value);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.strokeStyle = color;
+  }
+
+  function handleLineChange(e) {
+    setLine(e.target.value);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.lineWidth = line;
+  }
+
   return (
-    <div>
+    <div className={styles.canvas}>
       <canvas
         style={{ border: "2px solid black" }}
         ref={canvasRef}
-        width={400}
-        height={400}
+        width={750}
+        height={500}
         onMouseDown={startDrawing}
         onMouseUp={stopDrawing}
         onMouseMove={draw}
         onMouseLeave={stopDrawing}
       />
-      <button onClick={() => colorCng("red")}>Red</button>
-      <button onClick={() => colorCng("purple")}>purple</button>
-      <button onClick={clearBtn}>clear</button>
+      <div>
+        <button
+          className={styles.btn1}
+          onClick={() => colorCng("red")}
+        ></button>
+        <button onClick={() => colorCng("purple")}>purple</button>
+        <button onClick={clearBtn}>clear</button>
+        <input type="color" value={color} onChange={handleColorChange} />
+        <input
+          type="range"
+          min={1}
+          max={10}
+          value={line}
+          onChange={handleLineChange}
+        />
+      </div>
     </div>
   );
 }

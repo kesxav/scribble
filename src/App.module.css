@@ -1,0 +1,6 @@
+.app {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  background: url("./media/blue-background-white-doodles-set_78370-3164.avif");
+}
