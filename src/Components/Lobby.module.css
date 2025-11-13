@@ -12,11 +12,269 @@
 }
 
 .container {
-  height: 20em;
-  width: 25em;
-  background: white;
+  height: 15em;
+  width: 21em;
+  background-color: blue;
+  opacity: 0.5;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.input {
+  border: none;
+  height: 2em;
+  width: 17em;
+  border-radius: 0.2em;
+}
+
+.btnContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.btn1 {
+  background-color: lawngreen;
+  height: 3em;
+  width: 17em;
+  border: none;
+  border-radius: 0.2em;
+  cursor: pointer;
+  color: white;
+  font-size: large;
+}
+
+.btn2 {
+  background-color: rgb(91, 204, 248);
+  border: none;
+  border-radius: 0.2em;
+  cursor: pointer;
+  height: 2.5em;
+  color: white;
+}
+
+.avatarContainer {
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  width: 468px;
+  margin-bottom: 3em;
+}
+
+.avatar {
+  height: 48px;
+  width: 48px;
+  position: relative;
+}
+
+.color {
+  background-image: url("https://skribbl.io/img/avatar/color_atlas.gif");
+  background-position-x: 0%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.eyes {
+  background-image: url("https://skribbl.io/img/avatar/eyes_atlas.gif");
+  background-position-x: -300%;
+  background-position-y: -100%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.mouth {
+  background-image: url("https://skribbl.io/img/avatar/mouth_atlas.gif");
+  background-position-x: -400%;
+  background-position-y: -200%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.color2 {
+  background-image: url("https://skribbl.io/img/avatar/color_atlas.gif");
+  background-position-x: -100%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.eyes2 {
+  background-image: url("https://skribbl.io/img/avatar/eyes_atlas.gif");
+  background-position-x: -600%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.mouth2 {
+  background-image: url("https://skribbl.io/img/avatar/mouth_atlas.gif");
+  background-position-x: -700%;
+  background-position-y: -100%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.color3 {
+  background-image: url("https://skribbl.io/img/avatar/color_atlas.gif");
+  background-position-x: -200%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.eyes3 {
+  background-image: url("https://skribbl.io/img/avatar/eyes_atlas.gif");
+  background-position-x: -500%;
+  background-position-y: -500%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.mouth3 {
+  background-image: url("https://skribbl.io/img/avatar/mouth_atlas.gif");
+  background-position-x: -100%;
+  background-position-y: -100%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.color4 {
+  background-image: url("https://skribbl.io/img/avatar/color_atlas.gif");
+  background-position-x: -300%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.eyes4 {
+  background-image: url("https://skribbl.io/img/avatar/eyes_atlas.gif");
+  background-position-x: -900%;
+  background-position-y: -400%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.mouth4 {
+  background-image: url("https://skribbl.io/img/avatar/mouth_atlas.gif");
+  background-position-x: -200%;
+  background-position-y: -400%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.color5 {
+  background-image: url("https://skribbl.io/img/avatar/color_atlas.gif");
+  background-position-x: -400%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.eyes5 {
+  background-image: url("https://skribbl.io/img/avatar/eyes_atlas.gif");
+  background-position-x: -800%;
+  background-position-y: -200%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.mouth5 {
+  background-image: url("https://skribbl.io/img/avatar/mouth_atlas.gif");
+  background-position-x: -500%;
+  background-position-y: -200%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.color6 {
+  background-image: url("https://skribbl.io/img/avatar/color_atlas.gif");
+  background-position-x: -500%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.eyes6 {
+  background-image: url("https://skribbl.io/img/avatar/eyes_atlas.gif");
+  background-position-x: -300%;
+  background-position-y: -300%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.mouth6 {
+  background-image: url("https://skribbl.io/img/avatar/mouth_atlas.gif");
+  background-position-x: -900%;
+  background-position-y: -100%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.color7 {
+  background-image: url("https://skribbl.io/img/avatar/color_atlas.gif");
+  background-position-x: -600%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.eyes7 {
+  background-image: url("https://skribbl.io/img/avatar/eyes_atlas.gif");
+  background-position-x: -900%;
+  background-position-y: -100%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
+}
+
+.mouth7 {
+  background-image: url("https://skribbl.io/img/avatar/mouth_atlas.gif");
+  background-position-x: -800%;
+  background-position-y: 0%;
+
+  height: 48px;
+  width: 48px;
+  position: absolute;
 }

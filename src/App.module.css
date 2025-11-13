@@ -1,7 +1,0 @@
-.app {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-
-  background: url("https://skribbl.io/img/background.png");
-}
