@@ -1,11 +1,79 @@
-.canvas {
-  display: flex;
-  flex-direction: column;
-}
-
 .btn1 {
   background-color: red;
   border: none;
   height: 1.5em;
   width: 1.5em;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  margin-right: 8px;
+  align-items: center;
+}
+
+.wrapper {
+  height: 100%;
+  display: grid;
+  grid-template-areas:
+    "logo logo logo"
+    "bar bar bar"
+    "players canvas chat"
+    "footer tools .";
+
+  grid-template-columns: min-content auto auto;
+  grid-template-rows: min-content var(48px) min-content min-content;
+}
+
+.logo {
+  grid-area: logo;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 90px;
+}
+
+.bar {
+  grid-area: bar;
+  height: 100%;
+  position: relative;
+}
+
+.players {
+  grid-area: players;
+  position: relative;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  grid-area: footer;
+  display: flex;
+  align-items: center;
+  height: var(48px);
+}
+
+.chatInput {
+  display: none;
+}
+
+.canvas {
+  display: flex;
+  grid-area: canvas;
+  overflow: hidden;
+  position: relative;
+}
+
+.toolbar {
+  grid-area: tools;
+  position: relative;
+}
+
+.chat {
+  grid-area: chat;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
 }

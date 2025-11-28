@@ -69,33 +69,44 @@ export default function CanvasBoard() {
   }
 
   return (
-    <div className={styles.canvas}>
-      <canvas
-        style={{ border: "2px solid black" }}
-        ref={canvasRef}
-        width={750}
-        height={500}
-        onMouseDown={startDrawing}
-        onMouseUp={stopDrawing}
-        onMouseMove={draw}
-        onMouseLeave={stopDrawing}
-      />
-      <div>
-        <button
-          className={styles.btn1}
-          onClick={() => colorCng("red")}
-        ></button>
-        <button onClick={() => colorCng("purple")}>purple</button>
-        <button onClick={clearBtn}>clear</button>
-        <input type="color" value={color} onChange={handleColorChange} />
-        <input
-          type="range"
-          min={1}
-          max={10}
-          value={line}
-          onChange={handleLineChange}
+    <div className={styles.game}>
+      <div className={styles.wrapper}></div>
+      <div className={styles.logo}></div>
+      <div className={styles.bar}></div>
+      <div className={styles.players}></div>
+      <div className={styles.playersFooter}></div>
+      <div className={styles.chatInput}></div>
+      <div className={styles.canvas}>
+        <canvas
+          style={{ border: "2px solid black" }}
+          ref={canvasRef}
+          width={750}
+          height={500}
+          onMouseDown={startDrawing}
+          onMouseUp={stopDrawing}
+          onMouseMove={draw}
+          onMouseLeave={stopDrawing}
         />
       </div>
+      <div className={styles.toolbar}>
+        <div>
+          <button
+            className={styles.btn1}
+            onClick={() => colorCng("red")}
+          ></button>
+          <button onClick={() => colorCng("purple")}>purple</button>
+          <button onClick={clearBtn}>clear</button>
+          <input type="color" value={color} onChange={handleColorChange} />
+          <input
+            type="range"
+            min={1}
+            max={10}
+            value={line}
+            onChange={handleLineChange}
+          />
+        </div>
+      </div>
+      <div className={styles.chat}></div>
     </div>
   );
 }
