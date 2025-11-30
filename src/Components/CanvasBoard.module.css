@@ -36,14 +36,22 @@
 
 .bar {
   grid-area: bar;
-  height: 100%;
+  height: 48px;
+  font-size: 1em;
+  color: white;
+  text-align: center;
+  font-weight: 700;
+  background-color: white;
+  border-radius: 3px;
   position: relative;
 }
 
 .players {
   grid-area: players;
   position: relative;
+  flex: 0 0 auto;
   width: 200px;
+  border-radius: 3px;
   display: flex;
   flex-direction: column;
 }
@@ -76,4 +84,128 @@
   display: flex;
   flex-direction: column;
   width: 300px;
+}
+
+.logo a img {
+  width: 320px;
+  height: auto;
+}
+
+.settings {
+  z-index: 20;
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  right: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.icon {
+  position: relative;
+  cursor: pointer;
+  width: 87.5%;
+  height: 87.5%;
+  background-image: url("https://skribbl.io/img/settings.gif");
+  background-size: contain;
+}
+
+.clock {
+  pointer-events: none;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  background-image: url("https://skribbl.io/img/clock.gif");
+  background-size: contain;
+  color: #000;
+  font-size: 20px;
+  line-height: 3.6;
+  font-weight: bolder;
+  z-index: 10;
+  top: -10px;
+  left: -8px;
+  display: flex;
+  justify-content: center;
+}
+
+.round {
+  position: absolute;
+  left: 60px;
+  top: 14px;
+  font-size: 1.4em;
+  color: #000;
+}
+
+.word {
+  height: 100%;
+  font-family: Inconsolata, monospace;
+  font-weight: bolder;
+  color: black;
+  text-align: center;
+  position: relative;
+  font-size: 1em;
+  margin-left: 200px;
+  margin-right: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.playerList {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  height: 32px;
+}
+
+.playerFirst {
+  flex: 0 0 auto;
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+  height: 48px;
+  color: #000;
+}
+
+.background {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+
+.info {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.playername {
+  width: 100%;
+  font-size: 1em;
+  line-height: 1em;
+  font-weight: 700;
+}
+
+.playerrank {
+  position: absolute;
+  font-weight: 700;
+  font-size: 1.1em;
+  top: 5px;
+  left: 6px;
+}
+
+.playerscore {
+  width: 100%;
+  font-size: 0.9em;
+  line-height: 1em;
 }

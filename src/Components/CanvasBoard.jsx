@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./CanvasBoard.module.css";
+import logo from "./logo.gif";
 
 export default function CanvasBoard() {
   const canvasRef = useRef(null);
@@ -70,43 +71,73 @@ export default function CanvasBoard() {
 
   return (
     <div className={styles.game}>
-      <div className={styles.wrapper}></div>
-      <div className={styles.logo}></div>
-      <div className={styles.bar}></div>
-      <div className={styles.players}></div>
-      <div className={styles.playersFooter}></div>
-      <div className={styles.chatInput}></div>
-      <div className={styles.canvas}>
-        <canvas
-          style={{ border: "2px solid black" }}
-          ref={canvasRef}
-          width={750}
-          height={500}
-          onMouseDown={startDrawing}
-          onMouseUp={stopDrawing}
-          onMouseMove={draw}
-          onMouseLeave={stopDrawing}
-        />
-      </div>
-      <div className={styles.toolbar}>
-        <div>
-          <button
-            className={styles.btn1}
-            onClick={() => colorCng("red")}
-          ></button>
-          <button onClick={() => colorCng("purple")}>purple</button>
-          <button onClick={clearBtn}>clear</button>
-          <input type="color" value={color} onChange={handleColorChange} />
-          <input
-            type="range"
-            min={1}
-            max={10}
-            value={line}
-            onChange={handleLineChange}
+      <div className={styles.wrapper}>
+        <div className={styles.logo}>
+          <a href="/">
+            <img src={logo} />
+          </a>
+        </div>
+        <div className={styles.bar}>
+          <div className={styles.settings}>
+            <div className={styles.icon}></div>
+          </div>
+          <div className={styles.clock}>
+            <div>0</div>
+          </div>
+          <div className={styles.round}>
+            <div>Round 5 of 5</div>
+          </div>
+          <div className={styles.word}>
+            <div>Waiting</div>
+          </div>
+        </div>
+        <div className={styles.players}>
+          <div className={styles.playerList}>
+            <div className={styles.playerFirst}>
+              <div className={styles.background}></div>
+
+              <div className={styles.info}>
+                <div className={styles.playername}>Gomlumon</div>
+                <div className={styles.playerrank}>#1</div>
+                <div className={styles.playerscore}>0 points</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.playersFooter}></div>
+        <div className={styles.chatInput}></div>
+        <div className={styles.canvas}>
+          <canvas
+            style={{ border: "2px solid black" }}
+            ref={canvasRef}
+            width={800}
+            height={400}
+            onMouseDown={startDrawing}
+            onMouseUp={stopDrawing}
+            onMouseMove={draw}
+            onMouseLeave={stopDrawing}
           />
         </div>
+        <div className={styles.toolbar}>
+          <div>
+            <button
+              className={styles.btn1}
+              onClick={() => colorCng("red")}
+            ></button>
+            <button onClick={() => colorCng("purple")}>purple</button>
+            <button onClick={clearBtn}>clear</button>
+            <input type="color" value={color} onChange={handleColorChange} />
+            <input
+              type="range"
+              min={1}
+              max={10}
+              value={line}
+              onChange={handleLineChange}
+            />
+          </div>
+        </div>
+        <div className={styles.chat}></div>
       </div>
-      <div className={styles.chat}></div>
     </div>
   );
 }
