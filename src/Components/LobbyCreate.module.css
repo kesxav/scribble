@@ -1,0 +1,100 @@
+.homeChoices {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.homeChoice {
+  padding: 1.5rem;
+  border-radius: 1.3rem;
+  overflow: hidden;
+  width: min(42.5vw, 35rem);
+  height: 55vh;
+  background-color: #eee5e9;
+}
+
+.homeChoiceInner {
+  row-gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+}
+
+.title {
+  font-size: 1.25em;
+  font-weight: bold;
+  flex: 1;
+  /* padding: 25px; */
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  flex: 1;
+  grid-template-rows: max-content max-content max-content max-content max-content max-content max-content auto;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.numberInput {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  border-radius: 0.5em;
+  border: 2px hidden;
+}
+
+.numberInput input {
+  border-radius: 0;
+  padding-left: 0.5rem;
+}
+
+.numberInput button {
+  width: 1.5rem;
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+.numberdecrement {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.numberincrement {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.createButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.createButton {
+  height: 2rem;
+  flex: 1;
+  background-color: white;
+  border-radius: 0.5em;
+  border: 2px hidden;
+  cursor: pointer;
+}
+
+select,
+input,
+button,
+textarea {
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 2px hidden;
+}

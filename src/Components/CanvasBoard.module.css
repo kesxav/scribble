@@ -16,6 +16,7 @@
 .wrapper {
   height: 100%;
   display: grid;
+  gap: 5px;
   grid-template-areas:
     "logo logo logo"
     "bar bar bar"
@@ -23,7 +24,7 @@
     "footer tools .";
 
   grid-template-columns: min-content auto auto;
-  grid-template-rows: min-content var(48px) min-content min-content;
+  grid-template-rows: min-content 48px min-content min-content;
 }
 
 .logo {
@@ -36,7 +37,7 @@
 
 .bar {
   grid-area: bar;
-  height: 48px;
+  height: 100%;
   font-size: 1em;
   color: white;
   text-align: center;

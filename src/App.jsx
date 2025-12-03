@@ -1,8 +1,12 @@
-import CanvasBoard from "./Components/CanvasBoard";
+// import CanvasBoard from "./Components/CanvasBoard";
 
-// import Lobby from "./Components/Lobby";
+import Lobby from "./Components/Lobby";
+
 function App() {
-  return <CanvasBoard />;
+  return (
+    //  <CanvasBoard />
+    <Lobby />
+  );
 }
 
 export default App;

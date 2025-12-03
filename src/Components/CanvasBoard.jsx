@@ -21,6 +21,14 @@ export default function CanvasBoard() {
     ctx.strokeStyle = "black";
   }, []);
 
+  useEffect(() => {
+    const endDrawing = () => setIsDrawing(false);
+    window.addEventListener("mouseup", endDrawing);
+    return () => {
+      window.removeEventListener("mouseup", endDrawing);
+    };
+  }, []);
+
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -36,10 +44,6 @@ export default function CanvasBoard() {
     const ctx = canvas.getContext("2d");
     ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     ctx.stroke();
-  };
-
-  const stopDrawing = () => {
-    setIsDrawing(false);
   };
 
   const colorCng = (clr) => {
@@ -69,6 +73,12 @@ export default function CanvasBoard() {
     ctx.lineWidth = line;
   }
 
+  const handleMouseLeave = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.beginPath();
+  };
+
   return (
     <div className={styles.game}>
       <div className={styles.wrapper}>
@@ -95,7 +105,6 @@ export default function CanvasBoard() {
           <div className={styles.playerList}>
             <div className={styles.playerFirst}>
               <div className={styles.background}></div>
-
               <div className={styles.info}>
                 <div className={styles.playername}>Gomlumon</div>
                 <div className={styles.playerrank}>#1</div>
@@ -113,9 +122,8 @@ export default function CanvasBoard() {
             width={800}
             height={400}
             onMouseDown={startDrawing}
-            onMouseUp={stopDrawing}
+            onMouseLeave={handleMouseLeave}
             onMouseMove={draw}
-            onMouseLeave={stopDrawing}
           />
         </div>
         <div className={styles.toolbar}>
