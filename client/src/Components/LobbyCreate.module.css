@@ -98,3 +98,59 @@ textarea {
   border-radius: 0.5rem;
   border: 2px hidden;
 }
+
+.lobbyListHolder {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  display: none;
+}
+
+.lobbyList {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  gap: 0.25rem;
+}
+
+.lobbyListItem {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.lobbyListRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.lobbyListRow {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  align-items: center;
+}
+.lobbyItemInfo {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.lobbyItemIcon {
+  width: 2rem;
+  height: 2rem;
+  align-self: center;
+}
+
+.joinButton {
+  align-self: center;
+  height: 3rem;
+  width: 5rem;
+  font-size: 1.5rem;
+  border: 1px solid gray;
+}
