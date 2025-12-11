@@ -4,7 +4,7 @@ import Lobby from "./Components/Lobby";
 
 function App() {
   return (
-    //  <CanvasBoard />
+    // <CanvasBoard />
     <Lobby />
   );
 }

@@ -2,20 +2,22 @@ import { useState } from "react";
 import styles from "./LobbyCreate.module.css";
 
 function LobbyCreate() {
-  const [drawTime, setDrawTime] = useState("60");
-  const [rounds, setRounds] = useState(2);
-  const [maxPlayers, setMaxPlayers] = useState(2);
-  const [iplimit, setIpLimit] = useState(2);
-  const [customWords, setCustomWords] = useState(3);
+  const [drawTime, setDrawTime] = useState(60);
+  const [rounds, setRounds] = useState(5);
+  const [maxPlayers, setMaxPlayers] = useState(6);
+  const [words, setWords] = useState(3);
+  const [hints, setHints] = useState(2);
 
-  const MIN = 10;
-  const MAX = 300;
+  const handleSumbit = (e) => {
+    e.preventDefault();
+  };
 
-  const handleChange = (e) => {
+  const handleChange = (e, max, set) => {
+    const MAX = max;
     const newValue = e.target.value;
 
     if (newValue === "") {
-      setDrawTime("");
+      set("");
       return;
     }
 
@@ -24,64 +26,25 @@ function LobbyCreate() {
     const numValue = Number(newValue);
 
     if (numValue <= MAX) {
-      setDrawTime(newValue);
+      set(newValue);
     }
   };
 
-  const handleBlur = () => {
+  const handleBlur = (min) => {
+    const MIN = min;
     if (drawTime === "" || Number(drawTime) < MIN) {
       setDrawTime(String(MIN));
     }
   };
 
-  const handleSumbit = (e) => {
-    e.preventDefault();
+  const handleInc = (max, set, setter) => {
+    if (set >= max) return;
+    setter(parseInt(set) + 1);
   };
 
-  const handleIncDrawTime = () => {
-    if (drawTime >= 300) return;
-    setDrawTime(parseInt(drawTime) + 1);
-  };
-
-  const handleDecDrawTime = () => {
-    if (drawTime <= 0) return;
-    setDrawTime(parseInt(drawTime) - 1);
-  };
-
-  const handleIncRounds = () => {
-    if (rounds >= 20) return;
-    setRounds(parseInt(rounds) + 1);
-  };
-  const handleDecRounds = () => {
-    if (rounds <= 1) return;
-    setRounds(parseInt(rounds) - 1);
-  };
-
-  const handleIncPlayers = () => {
-    if (maxPlayers >= 20) return;
-    setMaxPlayers(parseInt(maxPlayers) + 1);
-  };
-  const handleDecPlayers = () => {
-    if (maxPlayers <= 1) return;
-    setMaxPlayers(parseInt(maxPlayers) - 1);
-  };
-
-  const handleIncIpLimit = () => {
-    if (iplimit >= 20) return;
-    setIpLimit(parseInt(iplimit) + 1);
-  };
-  const handleDecIpLimit = () => {
-    if (iplimit <= 1) return;
-    setIpLimit(parseInt(iplimit) - 1);
-  };
-
-  const handleIncCustomWords = () => {
-    if (customWords >= 20) return;
-    setCustomWords(parseInt(customWords) + 1);
-  };
-  const handleDecCustomWords = () => {
-    if (customWords <= 1) return;
-    setCustomWords(parseInt(customWords) - 1);
+  const handleDec = (min, set, setter) => {
+    if (set <= min) return;
+    setter(parseInt(set) - 1);
   };
 
   return (
@@ -92,34 +55,48 @@ function LobbyCreate() {
             <div className={styles.title}>Create Lobby</div>
           </div>
           <form className={styles.form} onSubmit={handleSumbit}>
-            <label className={styles.label}>Language</label>
-            <select>
-              <option>English</option>
-            </select>
-            <label className={styles.label}>Scoring</label>
-            <select>
-              <option>Chill</option>
-              <option>Competitive</option>
-            </select>
-            <label className={styles.label}>Drawing Time</label>
+            <label className={styles.label}>Players</label>
             <div className={styles.numberInput}>
               <button
                 className={styles.numberdecrement}
-                onClick={handleDecDrawTime}
+                onClick={() => handleDec(2, maxPlayers, setMaxPlayers)}
+              >
+                -
+              </button>
+              <input
+                type="text"
+                value={maxPlayers}
+                onChange={(e) => handleChange(e, 10, setMaxPlayers)}
+                onBlur={() => handleBlur(2)}
+                pattern="[0-9]*"
+                inputMode="numeric"
+              ></input>
+              <button
+                className={styles.numberincrement}
+                onClick={() => handleInc(10, maxPlayers, setMaxPlayers)}
+              >
+                +
+              </button>
+            </div>
+            <label className={styles.label}>Drawtime</label>
+            <div className={styles.numberInput}>
+              <button
+                className={styles.numberdecrement}
+                onClick={() => handleDec(10, drawTime, setDrawTime)}
               >
                 -
               </button>
               <input
                 type="text"
                 value={drawTime}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                onChange={(e) => handleChange(e, 300, setDrawTime)}
+                onBlur={() => handleBlur(10)}
                 pattern="[0-9]*"
                 inputMode="numeric"
               ></input>
               <button
                 className={styles.numberincrement}
-                onClick={handleIncDrawTime}
+                onClick={() => handleInc(300, drawTime, setDrawTime)}
               >
                 +
               </button>
@@ -128,82 +105,71 @@ function LobbyCreate() {
             <div className={styles.numberInput}>
               <button
                 className={styles.numberdecrement}
-                onClick={handleDecRounds}
+                onClick={() => handleDec(2, rounds, setRounds)}
               >
                 -
               </button>
               <input
                 type="text"
                 value={rounds}
-                onChange={(e) => setRounds(e.target.value)}
+                onChange={(e) => handleChange(e, 20, setRounds)}
+                onBlur={() => handleBlur(2)}
+                pattern="[0-9]*"
+                inputMode="numeric"
               ></input>
               <button
                 className={styles.numberincrement}
-                onClick={handleIncRounds}
+                onClick={() => handleInc(20, rounds, setRounds)}
               >
                 +
               </button>
             </div>
-            <label className={styles.label}>Maximum Players</label>
+            <label className={styles.label}>Word Count</label>
             <div className={styles.numberInput}>
               <button
                 className={styles.numberdecrement}
-                onClick={handleDecPlayers}
+                onClick={() => handleDec(3, words, setWords)}
               >
                 -
               </button>
               <input
-                type="number"
-                value={maxPlayers}
-                onChange={(e) => setMaxPlayers(e.target.value)}
+                type="text"
+                value={words}
+                onChange={(e) => handleChange(e, 5, setWords)}
+                onBlur={() => handleBlur(3)}
+                pattern="[0-9]*"
+                inputMode="numeric"
               ></input>
               <button
                 className={styles.numberincrement}
-                onClick={handleIncPlayers}
+                onClick={() => handleInc(5, words, setWords)}
               >
                 +
               </button>
             </div>
-            <label className={styles.label}>Players per IP Limit</label>
+            <label className={styles.label}>Hints</label>
             <div className={styles.numberInput}>
               <button
                 className={styles.numberdecrement}
-                onClick={handleDecIpLimit}
+                onClick={() => handleDec(1, hints, setHints)}
               >
                 -
               </button>
               <input
-                value={iplimit}
-                onChange={(e) => setIpLimit(e.target.value)}
+                type="text"
+                value={hints}
+                onChange={(e) => handleChange(e, 4, setHints)}
+                onBlur={() => handleBlur(1)}
+                pattern="[0-9]*"
+                inputMode="numeric"
               ></input>
               <button
                 className={styles.numberincrement}
-                onClick={handleIncIpLimit}
+                onClick={() => handleInc(4, hints, setHints)}
               >
                 +
               </button>
             </div>
-            <label className={styles.label}>Custom Words Per Turn</label>
-            <div className={styles.numberInput}>
-              <button
-                className={styles.numberdecrement}
-                onClick={handleDecCustomWords}
-              >
-                -
-              </button>
-              <input
-                value={customWords}
-                onChange={(e) => setCustomWords(e.target.value)}
-              ></input>
-              <button
-                className={styles.numberincrement}
-                onClick={handleIncCustomWords}
-              >
-                +
-              </button>
-            </div>
-            <label className={styles.label}>Custom Words</label>
-            <textarea></textarea>
           </form>
           <div className={styles.createButtons}>
             <button className={styles.createButton}>

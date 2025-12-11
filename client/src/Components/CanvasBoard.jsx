@@ -1,56 +1,127 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./CanvasBoard.module.css";
 import logo from "./logo.gif";
+import socket from "../socket";
+import useSocketEvent from "../hooks/useSocketEvent";
 
 export default function CanvasBoard() {
   const canvasRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
+  const ctxRef = useRef(null);
+  const isDrawing = useRef(false);
+  const lastPos = useRef({ x: 0, y: 0 });
+  const strokeRef = useRef([]);
+  const currentStrokeRef = useRef([]);
+  const [lineWeight, setLineWeight] = useState(5);
 
   const [color, setColor] = useState("black");
-  const [line, setLine] = useState("5");
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    console.log(ctx);
     //Canvas Setup
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.lineWidth = 5;
+
     ctx.lineCap = "round";
-    ctx.strokeStyle = "black";
+    ctxRef.current = ctx;
   }, []);
 
+  const drawLine = (x1, y1, x2, y2, color, lineWeight) => {
+    const ctx = ctxRef.current;
+    if (!ctx) return;
+    ctx.lineWidth = lineWeight;
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  };
+
+  const onMouseDown = (e) => {
+    const x = e.nativeEvent.offsetX;
+    const y = e.nativeEvent.offsetY;
+
+    isDrawing.current = true;
+    lastPos.current = { x, y };
+  };
+
+  const onMouseMove = (e) => {
+    if (!isDrawing.current) return;
+
+    const newX = e.nativeEvent.offsetX;
+    const newY = e.nativeEvent.offsetY;
+
+    drawLine(
+      lastPos.current.x,
+      lastPos.current.y,
+      newX,
+      newY,
+      color,
+      lineWeight
+    );
+
+    currentStrokeRef.current.push({
+      x1: lastPos.current.x,
+      y1: lastPos.current.y,
+      x2: newX,
+      y2: newY,
+      color,
+      lineWeight,
+    });
+
+    socket.emit("draw", {
+      x1: lastPos.current.x,
+      y1: lastPos.current.y,
+      x2: newX,
+      y2: newY,
+      color,
+      lineWeight,
+    });
+
+    lastPos.current = { x: newX, y: newY };
+  };
+
+  useSocketEvent("draw", ({ x1, y1, x2, y2, color, lineWeight }) => {
+    drawLine(x1, y1, x2, y2, color, lineWeight);
+  });
+
+  const undo = () => {
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+
+    if (strokeRef.current.length === 0) return;
+    strokeRef.current.pop();
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    strokeRef.current.forEach((stroke) => {
+      stroke.path.forEach((seg) => {
+        drawLine(seg.x1, seg.y1, seg.x2, seg.y2, seg.color, seg.lineWeight);
+      });
+    });
+  };
+
   useEffect(() => {
-    const endDrawing = () => setIsDrawing(false);
+    const endDrawing = () => {
+      if (!isDrawing.current) return;
+
+      if (currentStrokeRef.current.length > 0) {
+        strokeRef.current.push({
+          path: [...currentStrokeRef.current],
+        });
+      }
+      currentStrokeRef.current = [];
+
+      isDrawing.current = false;
+    };
+
     window.addEventListener("mouseup", endDrawing);
     return () => {
       window.removeEventListener("mouseup", endDrawing);
     };
   }, []);
-
-  const startDrawing = (e) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    ctx.beginPath();
-    ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-    setIsDrawing(true);
-  };
-
-  const draw = (e) => {
-    if (!isDrawing) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-    ctx.stroke();
-  };
-
-  const colorCng = (clr) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.strokeStyle = clr;
-  };
 
   const clearBtn = () => {
     const canvas = canvasRef.current;
@@ -59,25 +130,12 @@ export default function CanvasBoard() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
 
-  function handleColorChange(e) {
-    setColor(e.target.value);
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.strokeStyle = color;
-  }
-
-  function handleLineChange(e) {
-    setLine(e.target.value);
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.lineWidth = line;
-  }
-
-  const handleMouseLeave = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.beginPath();
-  };
+  // const handleMouseLeave = () => {
+  //   const canvas = canvasRef.current;
+  //   const ctx = canvas.getContext("2d");
+  //   console.log(ctx);
+  //   ctx.beginPath();
+  // };
 
   return (
     <div className={styles.game}>
@@ -121,26 +179,27 @@ export default function CanvasBoard() {
             ref={canvasRef}
             width={800}
             height={400}
-            onMouseDown={startDrawing}
-            onMouseLeave={handleMouseLeave}
-            onMouseMove={draw}
+            onMouseDown={onMouseDown}
+            // onMouseLeave={handleMouseLeave}
+            onMouseMove={onMouseMove}
           />
         </div>
         <div className={styles.toolbar}>
           <div>
             <button
               className={styles.btn1}
-              onClick={() => colorCng("red")}
+              onClick={() => setColor("red")}
             ></button>
-            <button onClick={() => colorCng("purple")}>purple</button>
+            <button onClick={() => setColor("purple")}>purple</button>
             <button onClick={clearBtn}>clear</button>
-            <input type="color" value={color} onChange={handleColorChange} />
+            <button onClick={undo}>undo</button>
+            <input type="color" value={color} />
             <input
               type="range"
               min={1}
               max={10}
-              value={line}
-              onChange={handleLineChange}
+              value={lineWeight}
+              onChange={(e) => setLineWeight(e.target.value)}
             />
           </div>
         </div>
