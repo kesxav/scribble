@@ -2,8 +2,9 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import GameRoom from "./Components/GameRoom.jsx";
+
 import "./index.css";
+import CanvasBoard from "./Components/CanvasBoard.jsx";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +14,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/gameroom",
-    element: <GameRoom />,
+    element: <CanvasBoard />,
   },
 ]);
 

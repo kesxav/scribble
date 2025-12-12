@@ -47,16 +47,6 @@
   position: relative;
 }
 
-.players {
-  grid-area: players;
-  position: relative;
-  flex: 0 0 auto;
-  width: 200px;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-}
-
 .footer {
   grid-area: footer;
   display: flex;
@@ -85,6 +75,10 @@
   display: flex;
   flex-direction: column;
   width: 300px;
+  font-size: 1em;
+  box-sizing: border-box;
+  padding-bottom: 0.2em;
+  border-radius: 3px;
 }
 
 .logo a img {
@@ -154,59 +148,4 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.playerList {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  height: 32px;
-}
-
-.playerFirst {
-  flex: 0 0 auto;
-  cursor: pointer;
-  position: relative;
-  width: 100%;
-  height: 48px;
-  color: #000;
-}
-
-.background {
-  overflow: hidden;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: white;
-}
-
-.info {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.playername {
-  width: 100%;
-  font-size: 1em;
-  line-height: 1em;
-  font-weight: 700;
-}
-
-.playerrank {
-  position: absolute;
-  font-weight: 700;
-  font-size: 1.1em;
-  top: 5px;
-  left: 6px;
-}
-
-.playerscore {
-  width: 100%;
-  font-size: 0.9em;
-  line-height: 1em;
 }

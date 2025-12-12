@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./CanvasBoard.module.css";
-import logo from "./logo.gif";
+// import logo from "./logo.gif";
 import socket from "../socket";
 import useSocketEvent from "../hooks/useSocketEvent";
+import ChatBox from "./ChatBox";
+import PlayerList from "./PlayerList";
 
 export default function CanvasBoard() {
   const canvasRef = useRef(null);
@@ -140,11 +142,11 @@ export default function CanvasBoard() {
   return (
     <div className={styles.game}>
       <div className={styles.wrapper}>
-        <div className={styles.logo}>
+        {/* <div className={styles.logo}>
           <a href="/">
             <img src={logo} />
           </a>
-        </div>
+        </div> */}
         <div className={styles.bar}>
           <div className={styles.settings}>
             <div className={styles.icon}></div>
@@ -159,25 +161,14 @@ export default function CanvasBoard() {
             <div>Waiting</div>
           </div>
         </div>
-        <div className={styles.players}>
-          <div className={styles.playerList}>
-            <div className={styles.playerFirst}>
-              <div className={styles.background}></div>
-              <div className={styles.info}>
-                <div className={styles.playername}>Gomlumon</div>
-                <div className={styles.playerrank}>#1</div>
-                <div className={styles.playerscore}>0 points</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <PlayerList />
         <div className={styles.playersFooter}></div>
         <div className={styles.chatInput}></div>
         <div className={styles.canvas}>
           <canvas
             style={{ border: "2px solid black" }}
             ref={canvasRef}
-            width={800}
+            width={730}
             height={400}
             onMouseDown={onMouseDown}
             // onMouseLeave={handleMouseLeave}
@@ -203,7 +194,9 @@ export default function CanvasBoard() {
             />
           </div>
         </div>
-        <div className={styles.chat}></div>
+        <div className={styles.chat}>
+          <ChatBox />
+        </div>
       </div>
     </div>
   );

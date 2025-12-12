@@ -15,6 +15,15 @@ io.on("connection", (socket) => {
   socket.on("draw", (data) => {
     socket.broadcast.emit("draw", data);
   });
+
+  socket.on("chat", (data) => {
+    socket.broadcast.emit("chat", data);
+  });
+
+  socket.on("name", (data) => {
+    io.emit("name", data);
+    console.log(data);
+  });
 });
 
 httpServer.listen(3001);
