@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./index.css";
 import CanvasBoard from "./Components/CanvasBoard.jsx";
+import PlayerInfoProvider from "./Context/PlayerInfoProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <PlayerInfoProvider>
+      <RouterProvider router={router} />
+    </PlayerInfoProvider>
   </StrictMode>
 );

@@ -9,6 +9,9 @@ const io = new Server(httpServer, {
   },
 });
 
+let players = {};
+
+console.log(players);
 io.on("connection", (socket) => {
   console.log("User Connected:", socket.id);
 
@@ -20,9 +23,16 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("chat", data);
   });
 
-  socket.on("name", (data) => {
-    io.emit("name", data);
-    console.log(data);
+  socket.on("addName", (name) => {
+    players[socket.id] = {
+      userId: socket.id,
+      username: name,
+      score: 0,
+      isDrawer: false,
+    };
+    console.log(players);
+
+    socket.emit("PlayerAdded", players[socket.id].username);
   });
 });
 

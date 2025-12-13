@@ -1,15 +1,14 @@
 import { useState } from "react";
 import styles from "./Name.module.css";
-import socket from "../socket";
 import { Link } from "react-router-dom";
+import socket from "../socket";
 
 function Name() {
   const [name, setName] = useState("");
 
   const handleName = () => {
     if (!name) return;
-
-    socket.emit("name", name);
+    socket.emit("addName", name);
   };
 
   return (

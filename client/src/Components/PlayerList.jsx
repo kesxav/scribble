@@ -1,16 +1,8 @@
-import { useState } from "react";
-import useSocketEvent from "../hooks/useSocketEvent";
 import styles from "./PlayerList.module.css";
+import usePlayerInfo from "../Context/usePlayerInfo";
 
 function PlayerList() {
-  const [name, setName] = useState([]);
-
-  useSocketEvent("name", (name) => {
-    setName((prev) => [...prev, name]);
-  });
-
-  console.log(name);
-
+  const { name } = usePlayerInfo();
   return (
     <div className={styles.players}>
       <div className={styles.playerList}>

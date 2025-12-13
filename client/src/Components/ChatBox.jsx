@@ -25,7 +25,6 @@ function ChatBox() {
     console.log("recived", message);
     setGuess((prev) => [...prev, message]);
   });
-  console.log(guess);
 
   return (
     <div>
