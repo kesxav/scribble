@@ -5,9 +5,9 @@ import useSocketEvent from "../hooks/useSocketEvent";
 function PlayerInfoProvider({ children }) {
   const [name, setName] = useState([]);
 
-  useSocketEvent("PlayerAdded", (name) => {
-    console.log("name", name);
-    setName((prev) => [...prev, name]);
+  useSocketEvent("players-update", (player) => {
+    console.log(player);
+    setName(player);
   });
   console.log(name);
   return (

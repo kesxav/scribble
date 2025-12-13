@@ -7,6 +7,8 @@ import "./index.css";
 import CanvasBoard from "./Components/CanvasBoard.jsx";
 import PlayerInfoProvider from "./Context/PlayerInfoProvider.jsx";
 
+import Room from "./Components/Room.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -16,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/gameroom",
     element: <CanvasBoard />,
+  },
+  {
+    path: "/room/:roomId",
+    element: <Room />,
   },
 ]);
 
