@@ -3,6 +3,7 @@ import usePlayerInfo from "../Context/usePlayerInfo";
 
 function PlayerList() {
   const { name } = usePlayerInfo();
+  console.log(name);
   return (
     <div className={styles.players}>
       <div className={styles.playerList}>
@@ -10,7 +11,7 @@ function PlayerList() {
           <div key={i} className={styles.player}>
             <div className={styles.background}></div>
             <div className={styles.info}>
-              <div className={styles.playername}>{name.name}</div>
+              <div className={styles.playername}>{name}</div>
               <div className={styles.playerrank}>#1</div>
               <div className={styles.playerscore}>0 points</div>
             </div>

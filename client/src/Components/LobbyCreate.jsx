@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styles from "./LobbyCreate.module.css";
-import useSocketEvent from "../hooks/useSocketEvent";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import socket from "../socket";
 
 function LobbyCreate() {
@@ -51,12 +50,17 @@ function LobbyCreate() {
     setter(parseInt(set) - 1);
   };
 
-  useSocketEvent("room-created", (roomId) => {
-    navigate(`/room/${roomId}`);
-  });
+  const createRoom = async () => {
+    const res = await fetch("http://localhost:5000/room/create", {
+      method: "POST",
+    });
 
-  const handleCreate = () => {
-    socket.emit("create-room");
+    const data = await res.json();
+    const roomId = data.roomId;
+
+    socket.emit("room-created", roomId);
+
+    navigate(`/room/${roomId}`);
   };
 
   return (
@@ -185,7 +189,7 @@ function LobbyCreate() {
               </div>
             </form>
             <div className={styles.createButtons}>
-              <button onClick={handleCreate} className={styles.createButton}>
+              <button onClick={createRoom} className={styles.createButton}>
                 "Create Public Room"
               </button>
 
@@ -246,5 +250,4 @@ function LobbyCreate() {
     </div>
   );
 }
-
 export default LobbyCreate;
