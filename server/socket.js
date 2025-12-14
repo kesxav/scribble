@@ -1,26 +1,26 @@
-let rooms = {};
+import rooms from "./game/room.js";
 
-function createRoom(roomId) {
-  rooms[roomId] = {
-    players: [],
-    drawerIndex: 0,
-    currentWord: "",
-    round: 1,
-    maxRounds: 3,
-    timeLeft: 60,
-    strokes: [],
-    timer: null,
-    hints: 2,
-  };
-}
+// function createRoom(roomId) {
+//   rooms[roomId] = {
+//     players: [],
+//     drawerIndex: 0,
+//     currentWord: "",
+//     round: 1,
+//     maxRounds: 3,
+//     timeLeft: 60,
+//     strokes: [],
+//     timer: null,
+//     hints: 2,
+//   };
+// }
 
 export default function registerSocket(io) {
   io.on("connection", (socket) => {
     console.log("User:", socket.id);
 
-    socket.on("room-created", (roomId) => {
-      createRoom(roomId);
-    });
+    // socket.on("room-created", (roomId) => {
+    //   // createRoom(roomId);
+    // });
 
     //Room-Join
     socket.on("join-room", ({ roomId, player }) => {
@@ -46,7 +46,12 @@ export default function registerSocket(io) {
 
       const playersNames = rooms[roomId].players.map((p) => p.playerName);
 
+      console.log(rooms);
+
       io.to(roomId).emit("players-update", playersNames);
+    });
+    socket.on("draw", (data) => {
+      socket.broadcast.emit("draw", data);
     });
   });
 }

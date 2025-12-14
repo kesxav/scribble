@@ -50,9 +50,9 @@
 //     io.to(roomId).emit("players-update", rooms[roomId].players);
 //   });
 
-//   socket.on("draw", (data) => {
-//     socket.broadcast.emit("draw", data);
-//   });
+// socket.on("draw", (data) => {
+//   socket.broadcast.emit("draw", data);
+// });
 
 //   socket.on("chat", (data) => {
 //     socket.broadcast.emit("chat", data);

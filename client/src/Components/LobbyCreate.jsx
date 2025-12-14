@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styles from "./LobbyCreate.module.css";
 import { useNavigate } from "react-router-dom";
-import socket from "../socket";
 
 function LobbyCreate() {
   const [drawTime, setDrawTime] = useState(60);
@@ -11,13 +10,38 @@ function LobbyCreate() {
   const [hints, setHints] = useState(2);
   const navigate = useNavigate();
 
+  const createRoom = async () => {
+    const payload = {
+      drawTime,
+      rounds,
+      maxPlayers,
+      words,
+      hints,
+    };
+
+    try {
+      const res = await fetch("http://localhost:5000/room/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      navigate(`/room/${data.roomId}`);
+    } catch (error) {
+      console.error("Room creation failed", error);
+    }
+  };
+
   const handleSumbit = (e) => {
     e.preventDefault();
   };
 
   const handleChange = (e, max, set) => {
     const MAX = max;
-    const newValue = e.target.value;
+    const newValue = Number(e.target.value);
 
     if (newValue === "") {
       set("");
@@ -48,19 +72,6 @@ function LobbyCreate() {
   const handleDec = (min, set, setter) => {
     if (set <= min) return;
     setter(parseInt(set) - 1);
-  };
-
-  const createRoom = async () => {
-    const res = await fetch("http://localhost:5000/room/create", {
-      method: "POST",
-    });
-
-    const data = await res.json();
-    const roomId = data.roomId;
-
-    socket.emit("room-created", roomId);
-
-    navigate(`/room/${roomId}`);
   };
 
   return (
