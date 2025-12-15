@@ -3,7 +3,7 @@ import usePlayerInfo from "../Context/usePlayerInfo";
 
 function PlayerList() {
   const { name } = usePlayerInfo();
-  console.log(name);
+
   return (
     <div className={styles.players}>
       <div className={styles.playerList}>

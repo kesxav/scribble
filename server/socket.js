@@ -13,6 +13,7 @@ import rooms from "./game/room.js";
 //     hints: 2,
 //   };
 // }
+const strokes = {};
 
 export default function registerSocket(io) {
   io.on("connection", (socket) => {
@@ -44,14 +45,41 @@ export default function registerSocket(io) {
 
       socket.join(roomId);
 
-      const playersNames = rooms[roomId].players.map((p) => p.playerName);
+      strokes[roomId] = {
+        strokes: [],
+      };
 
-      console.log(rooms);
+      socket.emit("strokes:init", strokes[roomId]);
+
+      const playersNames = rooms[roomId].players.map((p) => p.playerName);
 
       io.to(roomId).emit("players-update", playersNames);
     });
-    socket.on("draw", (data) => {
-      socket.broadcast.emit("draw", data);
+
+    socket.on("stroke:add", ({ roomId, stroke }) => {
+      if (!strokes[roomId]) return;
+
+      console.log(roomId);
+
+      strokes[roomId].strokes.push(stroke);
+
+      io.to(roomId).emit("strokes:add", stroke);
+    });
+
+    socket.on("stroke:undo", ({ roomId }) => {
+      if (!strokes[roomId]) return;
+
+      strokes[roomId].strokes.pop();
+
+      io.to(roomId).emit("strokes:undo", roomId);
+    });
+
+    socket.on("stroke:undo", ({ roomId }) => {
+      if (!strokes[roomId]) return;
+
+      strokes[roomId].strokes = [];
+
+      io.to(roomId).emit("strokes:clear");
     });
   });
 }

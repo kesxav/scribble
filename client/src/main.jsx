@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     // children: [{ path: "/gameroom", Component: <GameRoom /> }],
   },
   {
-    path: "/gameroom",
+    path: "/room/:roomId/gameroom",
     element: <CanvasBoard />,
   },
   {

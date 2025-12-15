@@ -9,8 +9,6 @@ function PlayerInfoProvider({ children }) {
     setName(playerNames);
   });
 
-  console.log(name);
-
   return (
     <PlayerInfoContext.Provider value={{ name }}>
       {children}

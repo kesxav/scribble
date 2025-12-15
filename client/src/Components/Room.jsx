@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { nanoid } from "nanoid";
 import styles from "./Room.module.css";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import socket from "../socket";
 
 function Room() {
   const { roomId } = useParams();
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
   let playerId = localStorage.getItem("playerId");
   if (!playerId) {
@@ -15,6 +16,7 @@ function Room() {
   }
 
   const joinRoom = () => {
+    navigate(`/room/${roomId}/gameroom`);
     if (!name) return;
     socket.emit("join-room", {
       roomId,
@@ -38,11 +40,9 @@ function Room() {
           ></input>
         </div>
         <div>
-          <Link to="/gameroom">
-            <button onClick={joinRoom} className={styles.btn}>
-              Join
-            </button>
-          </Link>
+          <button onClick={joinRoom} className={styles.btn}>
+            Join
+          </button>
         </div>
       </div>
     </div>
