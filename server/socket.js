@@ -49,21 +49,29 @@ export default function registerSocket(io) {
         strokes: [],
       };
 
-      socket.emit("strokes:init", strokes[roomId]);
+      socket.emit("stroke:init", strokes[roomId]);
 
       const playersNames = rooms[roomId].players.map((p) => p.playerName);
 
-      io.to(roomId).emit("players-update", playersNames);
+      io.to(roomId).emit("players-update", { roomId, playersNames });
+    });
+
+    socket.on("get-players", (roomId) => {
+      const playersNames =
+        rooms[roomId]?.players?.map((p) => p.playerName) || [];
+
+      console.log("Playernames", playersNames);
+      io.emit("players-update", { playersNames, roomId });
     });
 
     socket.on("stroke:add", ({ roomId, stroke }) => {
       if (!strokes[roomId]) return;
 
-      console.log(roomId);
+      console.log(roomId, stroke);
 
       strokes[roomId].strokes.push(stroke);
 
-      io.to(roomId).emit("strokes:add", stroke);
+      io.emit("stroke:add", stroke);
     });
 
     socket.on("stroke:undo", ({ roomId }) => {
@@ -71,15 +79,15 @@ export default function registerSocket(io) {
 
       strokes[roomId].strokes.pop();
 
-      io.to(roomId).emit("strokes:undo", roomId);
+      io.emit("stroke:undo", roomId);
     });
 
-    socket.on("stroke:undo", ({ roomId }) => {
+    socket.on("stroke:clear", ({ roomId }) => {
       if (!strokes[roomId]) return;
 
       strokes[roomId].strokes = [];
 
-      io.to(roomId).emit("strokes:clear");
+      io.to(roomId).emit("stroke:clear");
     });
   });
 }

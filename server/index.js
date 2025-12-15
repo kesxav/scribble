@@ -10,6 +10,6 @@ const io = new Server(server, {
 
 registerSocket(io);
 
-server.listen(5000, () => {
+server.listen(5001, () => {
   console.log("Server running on 5000");
 });

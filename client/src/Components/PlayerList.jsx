@@ -2,12 +2,12 @@ import styles from "./PlayerList.module.css";
 import usePlayerInfo from "../Context/usePlayerInfo";
 
 function PlayerList() {
-  const { name } = usePlayerInfo();
-
+  const {name} = usePlayerInfo() ?? {};
+  
   return (
     <div className={styles.players}>
       <div className={styles.playerList}>
-        {name.map((name, i) => (
+        {name?.map((name, i) => (
           <div key={i} className={styles.player}>
             <div className={styles.background}></div>
             <div className={styles.info}>

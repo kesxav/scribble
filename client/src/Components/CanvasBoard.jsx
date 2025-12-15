@@ -47,19 +47,19 @@ export default function CanvasBoard() {
   }, []);
 
   useEffect(() => {
-    socket.on("strokes:init", (strokes) => {
+    socket.on("stroke:init", (strokes) => {
       strokesRef.current = strokes;
       redrawAll();
     });
 
     socket.on("stroke:add", (stroke) => {
-      console.log(stroke);
+      console.log("Added Stroke");
       strokesRef.current.push(stroke);
       drawStroke(ctxRef.current, stroke);
     });
 
     socket.on("stroke:undo", (roomId) => {
-      console.log(roomId);
+      console.log("Undo Stroke", roomId);
       strokesRef.current.pop();
       redrawAll();
     });
@@ -75,7 +75,7 @@ export default function CanvasBoard() {
       socket.off("stroke:undo");
       socket.off("stroke:clear");
     };
-  }, [redrawAll]);
+  }, []);
 
   const drawStroke = (ctx, stroke) => {
     ctx.strokeStyle = stroke.color;
@@ -139,13 +139,13 @@ export default function CanvasBoard() {
   const undo = () => {
     strokesRef.current.pop();
     redrawAll();
-    socket.emit("stroke:undo", roomId);
+    socket.emit("stroke:undo", {roomId});
   };
 
   const clear = () => {
     strokesRef.current = [];
     redrawAll();
-    socket.emit("stroke:clear", roomId);
+    socket.emit("stroke:clear", {roomId});
   };
 
   return (
