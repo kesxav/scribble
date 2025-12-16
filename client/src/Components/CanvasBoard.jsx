@@ -4,6 +4,7 @@ import socket from "../socket.js";
 import styles from "./CanvasBoard.module.css";
 import ChatBox from "./ChatBox";
 import PlayerList from "./PlayerList";
+import StartOverlay from "./StartOverlay.jsx";
 
 export default function CanvasBoard() {
   const { roomId } = useParams();
@@ -19,6 +20,14 @@ export default function CanvasBoard() {
 
   const [color, setColor] = useState("black");
   const [lineWidth, setLineWidth] = useState(5);
+
+  const [started, setStarted] = useState(false);
+  const [drawer, setDrawer] = useState(null);
+
+  const handleStart = () => {
+    socket.emit("round:start", roomId);
+    setStarted(true);
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -69,13 +78,20 @@ export default function CanvasBoard() {
       redrawAll();
     });
 
+    socket.on("round:started", (drawer) => {
+      setDrawer(drawer);
+    });
+
     return () => {
       socket.off("strokes:init");
       socket.off("stroke:add");
       socket.off("stroke:undo");
       socket.off("stroke:clear");
+      socket.off("round:started");
     };
-  }, []);
+  }, [redrawAll]);
+
+  console.log(drawer);
 
   const drawStroke = (ctx, stroke) => {
     ctx.strokeStyle = stroke.color;
@@ -139,13 +155,13 @@ export default function CanvasBoard() {
   const undo = () => {
     strokesRef.current.pop();
     redrawAll();
-    socket.emit("stroke:undo", {roomId});
+    socket.emit("stroke:undo", { roomId });
   };
 
   const clear = () => {
     strokesRef.current = [];
     redrawAll();
-    socket.emit("stroke:clear", {roomId});
+    socket.emit("stroke:clear", { roomId });
   };
 
   return (
@@ -184,6 +200,7 @@ export default function CanvasBoard() {
             onMouseLeave={stopDrawing}
             style={{ border: "1px solid black", cursor: "crosshair" }}
           />
+          {!started && <StartOverlay onStart={handleStart} />}
         </div>
         <div className={styles.toolbar}>
           <div>

@@ -28,11 +28,6 @@ export default function registerSocket(io) {
       const room = rooms[roomId];
       if (!room) return;
 
-      const exists = room.players.some((p) => p.socketId === socket.id);
-
-      if (exists) {
-        console.log("Duplicate Join Prevented");
-      }
       const { playerId, name } = player;
 
       room.players.push({
@@ -60,7 +55,6 @@ export default function registerSocket(io) {
       const playersNames =
         rooms[roomId]?.players?.map((p) => p.playerName) || [];
 
-      console.log("Playernames", playersNames);
       io.emit("players-update", { playersNames, roomId });
     });
 
@@ -71,7 +65,7 @@ export default function registerSocket(io) {
 
       strokes[roomId].strokes.push(stroke);
 
-      io.emit("stroke:add", stroke);
+      io.to(roomId).emit("stroke:add", stroke);
     });
 
     socket.on("stroke:undo", ({ roomId }) => {
@@ -79,7 +73,7 @@ export default function registerSocket(io) {
 
       strokes[roomId].strokes.pop();
 
-      io.emit("stroke:undo", roomId);
+      io.to(roomId).emit("stroke:undo");
     });
 
     socket.on("stroke:clear", ({ roomId }) => {
@@ -88,6 +82,18 @@ export default function registerSocket(io) {
       strokes[roomId].strokes = [];
 
       io.to(roomId).emit("stroke:clear");
+    });
+
+    socket.on("round:start", (roomId) => {
+      const room = rooms[roomId];
+
+      const drawer = room.players[room.drawerIndex];
+
+      io.to(roomId).emit("round:started", drawer);
+    });
+
+    socket.on("chat", (data) => {
+      socket.broadcast.emit("chat", data);
     });
   });
 }
