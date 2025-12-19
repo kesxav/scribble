@@ -1,0 +1,26 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.btnContainer {
+  display: flex;
+  gap: 1em;
+}
+
+.btn {
+  border-radius: none;
+  height: 2em;
+  width: 5em;
+  cursor: pointer;
+}
+
+.btn:active {
+  background-color: greenyellow;
+  transform: translateY(2px);
+}

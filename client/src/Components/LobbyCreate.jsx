@@ -3,7 +3,7 @@ import styles from "./LobbyCreate.module.css";
 import { useNavigate } from "react-router-dom";
 
 function LobbyCreate() {
-  const [drawTime, setDrawTime] = useState(60);
+  const [drawTime, setDrawTime] = useState(10);
   const [rounds, setRounds] = useState(5);
   const [maxPlayers, setMaxPlayers] = useState(6);
   const [words, setWords] = useState(3);

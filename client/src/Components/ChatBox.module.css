@@ -18,3 +18,13 @@
   width: 98.6%;
   border-radius: 0;
 }
+
+.systemMsg {
+  background-color: greenyellow;
+
+  margin: 0;
+}
+
+.userMsg {
+  margin: 0;
+}

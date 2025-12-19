@@ -5,6 +5,7 @@ import styles from "./CanvasBoard.module.css";
 import ChatBox from "./ChatBox";
 import PlayerList from "./PlayerList";
 import StartOverlay from "./StartOverlay.jsx";
+import WordChoices from "./WordChoices.jsx";
 
 export default function CanvasBoard() {
   const { roomId } = useParams();
@@ -18,15 +19,26 @@ export default function CanvasBoard() {
   const strokesRef = useRef([]); // ALL strokes
   const currentStrokeRef = useRef([]); // One stroke
 
-  const [color, setColor] = useState("black");
+  const [color, setColor] = useState("#00000");
   const [lineWidth, setLineWidth] = useState(5);
 
   const [started, setStarted] = useState(false);
   const [drawer, setDrawer] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  const [correctWord, setCorrectWord] = useState(null);
+  const [round, setRound] = useState(1);
+  const [wordChoices, setWordChoices] = useState([]);
+  const [phase, setPhase] = useState("waiting");
+  const [selected, setSelected] = useState(false);
+  const [word, setWord] = useState(null);
+
+  const canDraw = socket.id === drawer?.socketId;
+
+  const isHost = drawer?.isHost;
 
   const handleStart = () => {
     socket.emit("round:start", roomId);
-    setStarted(true);
   };
 
   useEffect(() => {
@@ -46,6 +58,8 @@ export default function CanvasBoard() {
     const canvas = canvasRef.current;
     const ctx = ctxRef.current;
 
+    if (!canvas || !ctx) return;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -57,7 +71,8 @@ export default function CanvasBoard() {
 
   useEffect(() => {
     socket.on("stroke:init", (strokes) => {
-      strokesRef.current = strokes;
+      console.log("INIT STROKES COUNT", strokes?.length);
+      strokesRef.current = Array.isArray(strokes) ? strokes : [];
       redrawAll();
     });
 
@@ -78,20 +93,45 @@ export default function CanvasBoard() {
       redrawAll();
     });
 
-    socket.on("round:started", (drawer) => {
-      setDrawer(drawer);
+    socket.on("round:started", ({ drawerId, round, wordChoices }) => {
+      setDrawer(drawerId);
+      setRound(round);
+      setWordChoices(wordChoices);
+      setPhase("wordChoice");
+      setSelected(false);
+      setStarted(true);
+    });
+
+    socket.on("timer", (time) => {
+      setTimeLeft(time);
+    });
+
+    socket.on("word:selected", ({ word }) => {
+      setSelected(true);
+      setPhase("drawing");
+      setWord(word);
+    });
+
+    socket.on("round:ended", (word) => {
+      setCorrectWord(word);
+      setPhase("roundEnd");
+      setWord(null);
+    });
+
+    socket.on("gameEnded", () => {
+      setPhase("ended");
     });
 
     return () => {
-      socket.off("strokes:init");
+      socket.off("stroke:init");
       socket.off("stroke:add");
       socket.off("stroke:undo");
       socket.off("stroke:clear");
       socket.off("round:started");
+      socket.off("timer");
+      socket.off("round:ended");
     };
   }, [redrawAll]);
-
-  console.log(drawer);
 
   const drawStroke = (ctx, stroke) => {
     ctx.strokeStyle = stroke.color;
@@ -106,6 +146,7 @@ export default function CanvasBoard() {
   };
 
   const startDrawing = (e) => {
+    if (!canDraw) return;
     isDrawing.current = true;
     currentStrokeRef.current = [];
 
@@ -117,6 +158,7 @@ export default function CanvasBoard() {
   };
 
   const draw = (e) => {
+    if (!canDraw) return;
     if (!isDrawing.current) return;
 
     const rect = canvasRef.current.getBoundingClientRect();
@@ -137,6 +179,7 @@ export default function CanvasBoard() {
   };
 
   const stopDrawing = () => {
+    if (!canDraw) return;
     if (!isDrawing.current) return;
     isDrawing.current = false;
 
@@ -153,16 +196,20 @@ export default function CanvasBoard() {
   };
 
   const undo = () => {
+    if (!canDraw) return;
     strokesRef.current.pop();
     redrawAll();
     socket.emit("stroke:undo", { roomId });
   };
 
   const clear = () => {
+    if (!canDraw) return;
     strokesRef.current = [];
     redrawAll();
     socket.emit("stroke:clear", { roomId });
   };
+
+  console.log(word);
 
   return (
     <div className={styles.game}>
@@ -177,13 +224,13 @@ export default function CanvasBoard() {
             <div className={styles.icon}></div>
           </div>
           <div className={styles.clock}>
-            <div>0</div>
+            <div>{timeLeft}</div>
           </div>
           <div className={styles.round}>
-            <div>Round 5 of 5</div>
+            <div>Round {round} of 5</div>
           </div>
           <div className={styles.word}>
-            <div>Waiting</div>
+            <div>{canDraw ? word : word?.length}</div>
           </div>
         </div>
         <PlayerList />
@@ -200,8 +247,24 @@ export default function CanvasBoard() {
             onMouseLeave={stopDrawing}
             style={{ border: "1px solid black", cursor: "crosshair" }}
           />
-          {!started && <StartOverlay onStart={handleStart} />}
+          {phase === "roundEnd" && (
+            <div className={styles.correctWordOverlay}>
+              The word was:<strong>{correctWord.word}</strong>
+            </div>
+          )}
+          {!started ? (
+            <StartOverlay onStart={handleStart} />
+          ) : (
+            <WordChoices
+              phase={phase}
+              drawer={drawer}
+              selected={selected}
+              wordChoices={wordChoices}
+              canDraw={canDraw}
+            />
+          )}
         </div>
+
         <div className={styles.toolbar}>
           <div>
             <button

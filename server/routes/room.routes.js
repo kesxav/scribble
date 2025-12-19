@@ -15,7 +15,13 @@ router.post("/create", (req, res) => {
     words,
     hints,
     drawerIndex: 0,
+    timer: null,
+    currentWord: null,
+    round: 1,
+    phase: "waiting",
+    wordChoices: [],
     players: [],
+    timeLeft: 0,
   };
 
   res.json({ roomId });
