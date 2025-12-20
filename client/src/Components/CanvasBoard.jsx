@@ -28,6 +28,7 @@ export default function CanvasBoard() {
 
   const [correctWord, setCorrectWord] = useState(null);
   const [round, setRound] = useState(1);
+  const [rounds, setRounds] = useState(null);
   const [wordChoices, setWordChoices] = useState([]);
   const [phase, setPhase] = useState("waiting");
   const [selected, setSelected] = useState(false);
@@ -36,6 +37,8 @@ export default function CanvasBoard() {
   const canDraw = socket.id === drawer?.socketId;
 
   const isHost = drawer?.isHost;
+
+  console.log(isHost);
 
   const handleStart = () => {
     socket.emit("round:start", roomId);
@@ -93,13 +96,14 @@ export default function CanvasBoard() {
       redrawAll();
     });
 
-    socket.on("round:started", ({ drawerId, round, wordChoices }) => {
+    socket.on("round:started", ({ drawerId, round, wordChoices, rounds }) => {
       setDrawer(drawerId);
       setRound(round);
       setWordChoices(wordChoices);
       setPhase("wordChoice");
       setSelected(false);
       setStarted(true);
+      setRounds(rounds);
     });
 
     socket.on("timer", (time) => {
@@ -130,6 +134,7 @@ export default function CanvasBoard() {
       socket.off("round:started");
       socket.off("timer");
       socket.off("round:ended");
+      socket.off("gameEnded");
     };
   }, [redrawAll]);
 
@@ -209,7 +214,9 @@ export default function CanvasBoard() {
     socket.emit("stroke:clear", { roomId });
   };
 
-  console.log(word);
+  const handleRestart = () => {
+    socket.emit("game:restart", { roomId });
+  };
 
   return (
     <div className={styles.game}>
@@ -223,11 +230,18 @@ export default function CanvasBoard() {
           <div className={styles.settings}>
             <div className={styles.icon}></div>
           </div>
-          <div className={styles.clock}>
-            <div>{timeLeft}</div>
-          </div>
+          {timeLeft ? (
+            <div className={styles.clock}>
+              <div>{timeLeft}</div>
+            </div>
+          ) : null}
+
           <div className={styles.round}>
-            <div>Round {round} of 5</div>
+            {rounds ? (
+              <div>
+                Round {round} of {rounds}
+              </div>
+            ) : null}
           </div>
           <div className={styles.word}>
             <div>{canDraw ? word : word?.length}</div>
@@ -252,6 +266,12 @@ export default function CanvasBoard() {
               The word was:<strong>{correctWord.word}</strong>
             </div>
           )}
+
+          {phase === "ended" && isHost && (
+            <div className={styles.correctWordOverlay}>
+              <button onClick={handleRestart}>Restart</button>
+            </div>
+          )}
           {!started ? (
             <StartOverlay onStart={handleStart} />
           ) : (
@@ -265,27 +285,81 @@ export default function CanvasBoard() {
           )}
         </div>
 
-        <div className={styles.toolbar}>
-          <div>
-            <button
-              className={styles.btn1}
-              onClick={() => setColor("red")}
-            ></button>
-            <button onClick={() => setColor("purple")}>purple</button>
-            <button onClick={clear}>clear</button>
-            <button onClick={undo}>undo</button>
-            <input type="color" value={color} />
-            <input
-              type="range"
-              min={1}
-              max={10}
-              value={lineWidth}
-              onChange={(e) => setLineWidth(e.target.value)}
-            />
+        {canDraw ? (
+          <div className={styles.toolbar}>
+            <div className={styles.tools}>
+              <div className={styles.colors}>
+                <button
+                  className={styles.btnClr1}
+                  onClick={() => setColor("#000000")}
+                ></button>
+                <button
+                  className={styles.btnClr2}
+                  onClick={() => setColor("rgb(241, 17, 17)")}
+                ></button>
+                <button
+                  className={styles.btnClr3}
+                  onClick={() => setColor(" rgb(246, 235, 29)")}
+                ></button>
+                <button
+                  className={styles.btnClr4}
+                  onClick={() => setColor(" rgb(52, 222, 18)")}
+                ></button>
+                <button
+                  className={styles.btnClr5}
+                  onClick={() => setColor(" rgb(11, 227, 206)")}
+                ></button>
+                <button
+                  className={styles.btnClr6}
+                  onClick={() => setColor(" rgb(34, 17, 221)")}
+                ></button>
+                <button
+                  className={styles.btnClr7}
+                  onClick={() => setColor(" rgb(243, 9, 188)")}
+                ></button>
+                <button
+                  className={styles.btnClr8}
+                  onClick={() => setColor("  rgb(222, 18, 55)")}
+                ></button>
+                <button
+                  className={styles.btnClr9}
+                  onClick={() => setColor(" rgb(11, 210, 150)")}
+                ></button>
+                <button
+                  className={styles.btnClr10}
+                  onClick={() => setColor("rgb(255, 192, 203)")}
+                ></button>
+              </div>
+              <div className={styles.pencils}>
+                <button
+                  className={styles.pencil1}
+                  onClick={() => setLineWidth(5)}
+                ></button>
+                <button
+                  className={styles.pencil2}
+                  onClick={() => setLineWidth(10)}
+                ></button>
+                <button
+                  className={styles.pencil3}
+                  onClick={() => setLineWidth(20)}
+                ></button>
+                <button
+                  className={styles.pencil4}
+                  onClick={() => setLineWidth(30)}
+                ></button>
+              </div>
+              <div className={styles.undos}>
+                <button className={styles.undo} onClick={undo}></button>
+              </div>
+              <div className={styles.clear}>
+                <button className={styles.delete} onClick={clear}></button>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : null}
+
         <div className={styles.chat}>
-          <ChatBox />
+          <ChatBox canDraw={canDraw} />
         </div>
       </div>
     </div>

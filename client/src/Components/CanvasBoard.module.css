@@ -159,3 +159,132 @@
   justify-content: center;
   flex-direction: column;
 }
+
+.tools {
+  display: grid;
+
+  grid-template-columns: 2fr 1fr 0.5fr 0.5fr;
+}
+
+.colors {
+  display: grid;
+  grid-template-columns: 1.5em 1.5em 1.5em 1.5em 1.5em 1.5em 1.5em 1.5em 1.5em 1.5em;
+  height: 1.5em;
+}
+
+.btnClr1 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(3, 3, 3);
+}
+
+.btnClr2 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(241, 17, 17);
+}
+
+.btnClr3 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(246, 235, 29);
+}
+
+.btnClr4 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(52, 222, 18);
+}
+
+.btnClr5 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(11, 227, 206);
+}
+
+.btnClr6 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(34, 17, 221);
+}
+
+.btnClr7 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(243, 9, 188);
+}
+
+.btnClr8 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(222, 18, 55);
+}
+
+.btnClr9 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(11, 210, 150);
+}
+
+.btnClr10 {
+  cursor: pointer;
+  border-radius: 0;
+  background-color: rgb(255, 192, 203);
+}
+
+.delete {
+  background-image: url("../media/delete.png");
+  height: 40px;
+  width: 40px;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.undo {
+  background-image: url("../media/undo.png");
+  height: 40px;
+  width: 40px;
+  background-size: contain;
+  cursor: pointer;
+}
+
+.pencils {
+  display: flex;
+  gap: 5px;
+}
+
+.pencil1 {
+  cursor: pointer;
+  border-radius: 0;
+  background-image: url("../media/dot.png");
+  height: 40px;
+  width: 40px;
+  background-size: contain;
+}
+
+.pencil2 {
+  cursor: pointer;
+  border-radius: 0;
+  background-image: url("../media/pngimg.com\ -\ dot_PNG4.png");
+  height: 40px;
+  width: 40px;
+  background-size: contain;
+}
+
+.pencil3 {
+  cursor: pointer;
+  border-radius: 0;
+  background-image: url("../media/record-button.png");
+  height: 40px;
+  width: 40px;
+  background-size: contain;
+}
+
+.pencil4 {
+  cursor: pointer;
+  border-radius: 0;
+  background-image: url("../media/black-circle.png");
+  height: 40px;
+  width: 40px;
+  background-size: contain;
+}

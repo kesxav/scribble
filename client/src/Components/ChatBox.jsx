@@ -4,7 +4,7 @@ import socket from "../socket";
 import useSocketEvent from "../hooks/useSocketEvent";
 import { useParams } from "react-router-dom";
 
-function ChatBox() {
+function ChatBox({ canDraw }) {
   const { roomId } = useParams();
   const [chat, setChat] = useState("");
   const [guess, setGuess] = useState([]);
@@ -25,6 +25,7 @@ function ChatBox() {
   };
 
   const handleKeyDown = (e) => {
+    if (canDraw) return;
     if (e.key !== "Enter") return;
     if (!chat.trim()) return;
 
@@ -58,10 +59,11 @@ function ChatBox() {
         <input
           className={styles.chatInput}
           type="text"
-          placeholder="Enter Your Guess"
+          placeholder={canDraw ? "You're drawing" : "Type your guess"}
           value={chat}
           onChange={(e) => setChat(e.target.value)}
           onKeyDown={handleKeyDown}
+          disabled={canDraw}
         ></input>
       </form>
     </div>

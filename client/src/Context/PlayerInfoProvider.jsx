@@ -6,9 +6,10 @@ import socket from "../socket";
 function PlayerInfoProvider({ children, roomId }) {
   const [name, setName] = useState([]);
 
-  useSocketEvent("players-update", ({ playersNames, roomId: id }) => {
+  useSocketEvent("players-update", ({ playerNames, roomId: id }) => {
+    console.log(playerNames);
     if (id === roomId) {
-      setName(playersNames);
+      setName(playerNames);
     }
   });
 

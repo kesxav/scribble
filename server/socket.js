@@ -60,6 +60,7 @@ function startRound(io, roomId) {
     round: room.round,
     drawerId: drawer,
     wordChoices: room.wordChoices,
+    rounds: room.rounds,
   });
 }
 
@@ -133,7 +134,7 @@ export default function registerSocket(io) {
           isHost: true,
           socketId: socket.id,
           playerName: name?.trim() || "Player",
-          score: 1,
+          score: 0,
           hadGuessed: false,
         });
       } else {
@@ -147,8 +148,6 @@ export default function registerSocket(io) {
         });
       }
 
-      console.log(room.players);
-
       socket.join(roomId);
       if (!strokes[roomId]) {
         strokes[roomId] = {
@@ -158,17 +157,17 @@ export default function registerSocket(io) {
 
       socket.emit("stroke:init", strokes[roomId].strokes);
 
-      const playersNames = rooms[roomId].players.map((p) => p.playerName);
+      const playerNames = rooms[roomId].players;
 
-      io.to(roomId).emit("players-update", { roomId, playersNames });
+      io.to(roomId).emit("players-update", { roomId, playerNames });
     });
 
-    socket.on("get-players", (roomId) => {
-      const playersNames =
-        rooms[roomId]?.players?.map((p) => p.playerName) || [];
+    // socket.on("get-players", (roomId) => {
+    //   const playersNames =
+    //     rooms[roomId]?.players?.map((p) => p.playerName) || [];
 
-      io.emit("players-update", { playersNames, roomId });
-    });
+    //   io.emit("players-update", { playersNames, roomId });
+    // });
 
     socket.on("stroke:add", ({ roomId, stroke }) => {
       if (!strokes[roomId]) return;
@@ -244,7 +243,7 @@ export default function registerSocket(io) {
         player.hasGuessed = true;
         player.score += 10;
 
-        console.log(player.hasGuessed);
+        console.log(player.score);
 
         console.log(player.playerName);
 
@@ -276,6 +275,32 @@ export default function registerSocket(io) {
         endRound(io, roomId, "all-guessed");
       }
     }
+
+    socket.on("disconnect", () => {
+      for (const roomId in rooms) {
+        const room = rooms[roomId];
+
+        const index = room.players.findIndex((p) => p.socketId === socket.id);
+
+        if (index === -1) continue;
+
+        const wasHost = room.players[index].isHost;
+
+        room.players.splice(index, 1);
+
+        if (wasHost && room.players.length > 0) {
+          room.players[0].isHost = true;
+        }
+
+        const playerNames = rooms[roomId].players;
+
+        io.to(roomId).emit("players-update", { playerNames, roomId });
+
+        if (room.players.length === 0) {
+          delete rooms[roomId];
+        }
+      }
+    });
 
     // socket.on("chat", ({ roomId, text }) => {
     //   const room = rooms[roomId];
