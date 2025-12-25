@@ -12,8 +12,7 @@ function PlayerList() {
             <div className={styles.background}></div>
             <div className={styles.info}>
               <div className={styles.playername}>{name.playerName}</div>
-              <div className={styles.playerrank}>#1</div>
-              <div className={styles.playerscore}>0 points</div>
+              <div className={styles.playerscore}>{name.score} points</div>
             </div>
           </div>
         ))}

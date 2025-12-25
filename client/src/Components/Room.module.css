@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 5em;
+  gap: 3em;
   width: 20em;
   height: 55vh;
   background-color: rgba(12, 44, 150, 0.75);
@@ -19,7 +19,7 @@
 
 .input {
   height: 3em;
-  width: 10em;
+  width: 12em;
   border: none;
 }
 
@@ -27,5 +27,18 @@
   height: 3em;
   width: 8em;
   background-color: lawngreen;
+  cursor: pointer;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.btn1 {
+  height: 3em;
+  width: 8em;
+  background-color: gainsboro;
   cursor: pointer;
 }

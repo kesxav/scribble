@@ -16,7 +16,8 @@
 .btn {
   border-radius: none;
   height: 2em;
-  width: 5em;
+  min-width: 5em;
+  max-width: 10em;
   cursor: pointer;
 }
 

@@ -31,6 +31,8 @@ function Room() {
     navigate("gameroom");
   };
 
+  const roomLink = `${window.location.origin}/room/${roomId}`;
+
   return (
     <PlayerInfoProvider roomId={roomId}>
       <div className={styles.container}>
@@ -46,9 +48,15 @@ function Room() {
                 onChange={(e) => setName(e.target.value)}
               ></input>
             </div>
-            <div>
+            <div className={styles.buttons}>
               <button onClick={joinRoom} className={styles.btn}>
                 Join
+              </button>
+              <button
+                className={styles.btn1}
+                onClick={() => navigator.clipboard.writeText(roomLink)}
+              >
+                Copy Room Link
               </button>
             </div>
           </div>

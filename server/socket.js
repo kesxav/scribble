@@ -1,4 +1,19 @@
 import rooms from "./game/room.js";
+import fs from "fs";
+import csv from "csv-parser";
+
+const WORDS = [];
+
+fs.createReadStream("./words/Skribbl-words.csv")
+  .pipe(csv())
+  .on("data", (row) => {
+    if (row.word) {
+      WORDS.push(row.word.trim());
+    }
+  })
+  .on("end", () => {
+    console.log("words loaded:", WORDS.length);
+  });
 
 // function createRoom(roomId) {
 //   rooms[roomId] = {
@@ -14,16 +29,6 @@ import rooms from "./game/room.js";
 //   };
 // }
 const strokes = {};
-
-const WORDS = [
-  "Apple",
-  "Orange",
-  "Pineapple",
-  "Banana",
-  "Guava",
-  "Truck",
-  "Car",
-];
 
 function getRandomWord(count) {
   const shuffled = [...WORDS].sort(() => 0.5 - Math.random());
@@ -78,9 +83,10 @@ function endRound(io, roomId, reason) {
   room.round++;
   rotateDrawer(room);
 
+  strokes[roomId].strokes = [];
+  io.to(roomId).emit("stroke:clear");
+
   setTimeout(() => {
-    strokes[roomId].strokes = [];
-    io.to(roomId).emit("stroke:clear");
     startRound(io, roomId);
   }, 5000);
 }
@@ -143,19 +149,24 @@ export default function registerSocket(io) {
           isHost: false,
           socketId: socket.id,
           playerName: name?.trim() || "Player",
-          score: 1,
-          hadGuessed: false,
+          score: 0,
+          hadGuessed: true,
         });
       }
 
+      io.to(roomId).emit("update", {
+        isHost: room.players[room.drawerIndex].isHost,
+      });
+
       socket.join(roomId);
+
       if (!strokes[roomId]) {
         strokes[roomId] = {
           strokes: [],
         };
       }
 
-      socket.emit("stroke:init", strokes[roomId].strokes);
+      io.to(roomId).emit("stroke:init", strokes[roomId].strokes);
 
       const playerNames = rooms[roomId].players;
 
@@ -243,9 +254,9 @@ export default function registerSocket(io) {
         player.hasGuessed = true;
         player.score += 10;
 
-        console.log(player.score);
+        const playerNames = rooms[roomId].players;
 
-        console.log(player.playerName);
+        io.to(roomId).emit("players-update", { playerNames, roomId });
 
         io.to(roomId).emit("player:guessed", {
           playerId: player.socketId,
@@ -286,11 +297,20 @@ export default function registerSocket(io) {
 
         const wasHost = room.players[index].isHost;
 
+        const wasDrawer = index === room.drawerIndex;
+
         room.players.splice(index, 1);
 
         if (wasHost && room.players.length > 0) {
           room.players[0].isHost = true;
         }
+
+        if (wasDrawer && room.phase === "drawing") {
+          endRound(io, roomId);
+        }
+
+        // endRound(io, roomId);
+        // startRound(io, roomId);
 
         const playerNames = rooms[roomId].players;
 

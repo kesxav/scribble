@@ -33,10 +33,9 @@ export default function CanvasBoard() {
   const [phase, setPhase] = useState("waiting");
   const [selected, setSelected] = useState(false);
   const [word, setWord] = useState(null);
+  const [isHost, setIsHost] = useState(null);
 
   const canDraw = socket.id === drawer?.socketId;
-
-  const isHost = drawer?.isHost;
 
   console.log(isHost);
 
@@ -74,6 +73,7 @@ export default function CanvasBoard() {
 
   useEffect(() => {
     socket.on("stroke:init", (strokes) => {
+      console.log(strokes);
       console.log("INIT STROKES COUNT", strokes?.length);
       strokesRef.current = Array.isArray(strokes) ? strokes : [];
       redrawAll();
@@ -106,6 +106,10 @@ export default function CanvasBoard() {
       setRounds(rounds);
     });
 
+    socket.on("update", ({ isHost }) => {
+      setIsHost(isHost);
+    });
+
     socket.on("timer", (time) => {
       setTimeLeft(time);
     });
@@ -135,6 +139,7 @@ export default function CanvasBoard() {
       socket.off("timer");
       socket.off("round:ended");
       socket.off("gameEnded");
+      socket.off("update");
     };
   }, [redrawAll]);
 
@@ -263,7 +268,8 @@ export default function CanvasBoard() {
           />
           {phase === "roundEnd" && (
             <div className={styles.correctWordOverlay}>
-              The word was:<strong>{correctWord.word}</strong>
+              The word was:
+              <strong>{correctWord.word}</strong>
             </div>
           )}
 
@@ -273,7 +279,7 @@ export default function CanvasBoard() {
             </div>
           )}
           {!started ? (
-            <StartOverlay onStart={handleStart} />
+            <StartOverlay onStart={handleStart} isHost={isHost} />
           ) : (
             <WordChoices
               phase={phase}

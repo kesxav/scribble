@@ -7,7 +7,6 @@ function PlayerInfoProvider({ children, roomId }) {
   const [name, setName] = useState([]);
 
   useSocketEvent("players-update", ({ playerNames, roomId: id }) => {
-    console.log(playerNames);
     if (id === roomId) {
       setName(playerNames);
     }

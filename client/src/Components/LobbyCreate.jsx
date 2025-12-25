@@ -3,7 +3,7 @@ import styles from "./LobbyCreate.module.css";
 import { useNavigate } from "react-router-dom";
 
 function LobbyCreate() {
-  const [drawTime, setDrawTime] = useState(10);
+  const [drawTime, setDrawTime] = useState(60);
   const [rounds, setRounds] = useState(5);
   const [maxPlayers, setMaxPlayers] = useState(6);
   const [words, setWords] = useState(3);
@@ -57,10 +57,10 @@ function LobbyCreate() {
     }
   };
 
-  const handleBlur = (min) => {
+  const handleBlur = (min, setter, set) => {
     const MIN = min;
-    if (drawTime === "" || Number(drawTime) < MIN) {
-      setDrawTime(String(MIN));
+    if (set === "" || Number(set) < MIN) {
+      setter(String(MIN));
     }
   };
 
@@ -95,7 +95,7 @@ function LobbyCreate() {
                   type="text"
                   value={maxPlayers}
                   onChange={(e) => handleChange(e, 10, setMaxPlayers)}
-                  onBlur={() => handleBlur(2)}
+                  onBlur={() => handleBlur(2, setMaxPlayers, maxPlayers)}
                   pattern="[0-9]*"
                   inputMode="numeric"
                 ></input>
@@ -118,7 +118,7 @@ function LobbyCreate() {
                   type="text"
                   value={drawTime}
                   onChange={(e) => handleChange(e, 300, setDrawTime)}
-                  onBlur={() => handleBlur(10)}
+                  onBlur={() => handleBlur(10, setDrawTime, drawTime)}
                   pattern="[0-9]*"
                   inputMode="numeric"
                 ></input>
@@ -141,7 +141,7 @@ function LobbyCreate() {
                   type="text"
                   value={rounds}
                   onChange={(e) => handleChange(e, 20, setRounds)}
-                  onBlur={() => handleBlur(2)}
+                  onBlur={() => handleBlur(2, setRounds, rounds)}
                   pattern="[0-9]*"
                   inputMode="numeric"
                 ></input>
@@ -164,7 +164,7 @@ function LobbyCreate() {
                   type="text"
                   value={words}
                   onChange={(e) => handleChange(e, 5, setWords)}
-                  onBlur={() => handleBlur(3)}
+                  onBlur={() => handleBlur(3, setWords, words)}
                   pattern="[0-9]*"
                   inputMode="numeric"
                 ></input>
@@ -187,7 +187,7 @@ function LobbyCreate() {
                   type="text"
                   value={hints}
                   onChange={(e) => handleChange(e, 4, setHints)}
-                  onBlur={() => handleBlur(1)}
+                  onBlur={() => handleBlur(1, setHints, hints)}
                   pattern="[0-9]*"
                   inputMode="numeric"
                 ></input>
