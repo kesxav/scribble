@@ -250,7 +250,7 @@ export default function registerSocket(io ,WORDS) {
           name: player.playerName,
         });
 
-        checkEveryoneGuessed(roomId);
+        checkEveryoneGuessed(roomId,WORDS);
       } else {
         io.to(roomId).emit("chat", {
           type: "chat",
@@ -260,7 +260,7 @@ export default function registerSocket(io ,WORDS) {
       }
     });
 
-    function checkEveryoneGuessed(roomId) {
+    function checkEveryoneGuessed(roomId,WORDS) {
       const room = rooms[roomId];
 
       const drawer = room.players[room.drawerIndex];
@@ -270,7 +270,7 @@ export default function registerSocket(io ,WORDS) {
         .every((p) => p.hasGuessed);
 
       if (allGuessed) {
-        endRound(io, roomId,WORDS);
+        endRound(io, roomId, WORDS);
       }
     }
 
