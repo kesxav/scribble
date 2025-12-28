@@ -32,4 +32,4 @@ const loadWords = () => {
   });
 }
 
-export default loadWords
+export default loadWords;
