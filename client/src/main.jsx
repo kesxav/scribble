@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./index.css";
 import CanvasBoard from "./Components/CanvasBoard.jsx";
-import PlayerInfoProvider from "./context/PlayerInfoProvider.jsx";
+
 
 import Room from "./Components/Room.jsx";
 

@@ -1,4 +1,4 @@
-import styles from "./StartOverlay.module.css";
+import styles from "./StartOverLay.module.css";
 
 function StartOverlay({ onStart, isHost }) {
   return (

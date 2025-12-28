@@ -20,7 +20,7 @@ function LobbyCreate() {
     };
 
     try {
-      const res = await fetch("http://localhost:5001/room/create", {
+      const res = await fetch("http://localhost:3000/room/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
