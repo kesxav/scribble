@@ -1,19 +1,6 @@
 import rooms from "./game/room.js";
-import fs from "fs";
-import csv from "csv-parser";
 
-const WORDS = [];
 
-fs.createReadStream("./words/Skribbl-words.csv")
-  .pipe(csv())
-  .on("data", (row) => {
-    if (row.word) {
-      WORDS.push(row.word.trim());
-    }
-  })
-  .on("end", () => {
-    console.log("words loaded:", WORDS.length);
-  });
 
 // function createRoom(roomId) {
 //   rooms[roomId] = {
@@ -30,7 +17,7 @@ fs.createReadStream("./words/Skribbl-words.csv")
 // }
 const strokes = {};
 
-function getRandomWord(count) {
+function getRandomWord(count,WORDS) {
   const shuffled = [...WORDS].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 }
@@ -39,7 +26,7 @@ function rotateDrawer(room) {
   room.drawerIndex = (room.drawerIndex + 1) % room.players.length;
 }
 
-function startRound(io, roomId) {
+function startRound(io, roomId,WORDS) {
   const room = rooms[roomId];
 
   // if (room.timer) {
@@ -57,7 +44,7 @@ function startRound(io, roomId) {
   room.players.forEach((player) => {
     player.hasGuessed = false;
   });
-  room.wordChoices = getRandomWord(room.words);
+  room.wordChoices = getRandomWord(room.words,WORDS);
 
   const drawer = room.players[room.drawerIndex];
 
@@ -109,7 +96,7 @@ function restartGame(io, roomId) {
   startRound(io, roomId);
 }
 
-export default function registerSocket(io) {
+export default function registerSocket(io ,WORDS) {
   io.on("connection", (socket) => {
     console.log("User:", socket.id);
 
@@ -207,7 +194,7 @@ export default function registerSocket(io) {
       // const room = rooms[roomId];
       // const drawer = room.players[room.drawerIndex];
 
-      startRound(io, roomId);
+      startRound(io, roomId,WORDS);
 
       // io.to(roomId).emit("round:started", {
       //   drawer: drawer.socketId,
