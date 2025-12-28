@@ -63,8 +63,7 @@ function endRound(io, roomId, WORDS) {
   clearInterval(room.timer);
 
   io.to(roomId).emit("round:ended", {
-    word: room.currentWord,
-    reason: reason,
+    word: room.currentWord
   });
 
   room.round++;
