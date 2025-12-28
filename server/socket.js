@@ -56,7 +56,7 @@ function startRound(io, roomId,WORDS) {
   });
 }
 
-function endRound(io, roomId, reason) {
+function endRound(io, roomId, WORDS) {
   const room = rooms[roomId];
   if (!room) return;
 
@@ -74,7 +74,7 @@ function endRound(io, roomId, reason) {
   io.to(roomId).emit("stroke:clear");
 
   setTimeout(() => {
-    startRound(io, roomId);
+    startRound(io, roomId,WORDS);
   }, 5000);
 }
 
@@ -225,7 +225,7 @@ export default function registerSocket(io ,WORDS) {
 
         if (room.timeLeft <= 0) {
           clearInterval(room.timer);
-          endRound(io, roomId, "Time's up");
+          endRound(io, roomId, WORDS);
         }
       }, 1000);
     }
@@ -270,7 +270,7 @@ export default function registerSocket(io ,WORDS) {
         .every((p) => p.hasGuessed);
 
       if (allGuessed) {
-        endRound(io, roomId, "all-guessed");
+        endRound(io, roomId,WORDS);
       }
     }
 
@@ -293,7 +293,7 @@ export default function registerSocket(io ,WORDS) {
         }
 
         if (wasDrawer && room.phase === "drawing") {
-          endRound(io, roomId);
+          endRound(io, roomId,WORDS);
         }
 
         // endRound(io, roomId);
