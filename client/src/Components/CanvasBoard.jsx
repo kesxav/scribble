@@ -273,11 +273,15 @@ export default function CanvasBoard() {
             </div>
           )}
 
-          {phase === "ended" && isHost && (
-            <div className={styles.correctWordOverlay}>
-              <button onClick={handleRestart}>Restart</button>
-            </div>
-          )}
+          {phase === "ended" && (
+  <div className={styles.correctWordOverlay}>
+    {isHost ? (
+      <button onClick={handleRestart}>Restart</button>
+    ) : (
+      <p>Waiting for host to restart…</p>
+    )}
+  </div>
+)}
           {!started ? (
             <StartOverlay onStart={handleStart} isHost={isHost} />
           ) : (

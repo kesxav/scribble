@@ -1,4 +1,5 @@
 import rooms from "./game/room.js";
+import loadWords from "./words.js"
 
 
 
@@ -77,7 +78,7 @@ function endRound(io, roomId, WORDS) {
   }, 5000);
 }
 
-function restartGame(io, roomId) {
+function restartGame(io, roomId ,WORDS) {
   const room = rooms[roomId];
   if (!room) return;
 
@@ -92,7 +93,7 @@ function restartGame(io, roomId) {
   });
   io.to(roomId).emit("game:restarted");
 
-  startRound(io, roomId);
+  startRound(io, roomId,WORDS);
 }
 
 export default function registerSocket(io ,WORDS) {
@@ -106,7 +107,12 @@ export default function registerSocket(io ,WORDS) {
 
       if (!player?.isHost) return;
 
-      restartGame(io, roomId);
+      async function restart() {
+        const WORDS = await loadWords()
+         restartGame(io, roomId,WORDS);
+      }
+
+     restart()
     });
 
     // socket.on("room-created", (roomId) => {
